@@ -4,9 +4,17 @@
         <servlet-name>RegistrationService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.RegistrationService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchQueryService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.SearchQueryService</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegistrationService</servlet-name>
         <url-pattern>/Registration</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchQueryService</servlet-name>
+        <url-pattern>/SearchQuery</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
