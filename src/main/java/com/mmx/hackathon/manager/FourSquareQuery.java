@@ -1,4 +1,3 @@
-
 package com.mmx.hackathon.manager;
 
 import java.io.BufferedReader;
@@ -11,6 +10,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,9 +43,14 @@ public class FourSquareQuery {
     }
 
     public ArrayList<HashMap> userInfoQuery(String lati, String longi, String search_query) throws Exception {
-//        if (lati == null || lati.equals("") || longi == null || longi.equals("") || search_query == null || search_query.equals("")) {
-//            return null;
-//        }
+        if (lati == null || lati.equals("") || longi == null || longi.equals("") || search_query == null || search_query.equals("")) {
+            return null;
+        }
+        Map param = new HashMap();
+        param.put("lattitude", lati);
+        param.put("longitude", longi);
+        param.put("searchquery", search_query);
+        DBManager.getDB().addDefaultMap("searchQuery", param);
 //        String url = "https://api.foursquare.com/v2/venues/search?client_id=VDR00UBHJK2Z5PBCHQPG1HFE5BGFIRHF4ILWB0NEX512J2JQ&client_secret=DBSSDIAGE3NZ0YNJQUSUUYBBYQOPSJY4GIR14VB20GA1MYJN&v=20130815&ll=12.9667,77.5667&query=sushi";
         String url = "https://api.foursquare.com/v2/venues/search?client_id=VDR00UBHJK2Z5PBCHQPG1HFE5BGFIRHF4ILWB0NEX512J2JQ&client_secret=DBSSDIAGE3NZ0YNJQUSUUYBBYQOPSJY4GIR14VB20GA1MYJN&v=20130815&ll=" + lati + "," + longi + "&query=" + search_query;
 
