@@ -18,6 +18,7 @@ public class User {
     private String gcmId;
     private String createdate;
     private String updatedate;
+    private String createdBy;
 
     public Object getId() {
         return _id;
@@ -81,6 +82,14 @@ public class User {
 
     public void setUpdatedate(String updatedate) {
         this.updatedate = updatedate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
    
    
