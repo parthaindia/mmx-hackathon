@@ -18,6 +18,7 @@ public class User {
     private String gcmId;
     private String createdate;
     private String updatedate;
+    private String createdBy;
 
     public Object getId() {
         return _id;
