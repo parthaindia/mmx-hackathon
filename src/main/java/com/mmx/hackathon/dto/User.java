@@ -83,6 +83,14 @@ public class User {
     public void setUpdatedate(String updatedate) {
         this.updatedate = updatedate;
     }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
    
    
 }
