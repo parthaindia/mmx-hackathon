@@ -19,6 +19,15 @@ public class User {
     private String createdate;
     private String updatedate;
     private String createdBy;
+    private String _uuid;
+
+    public String getUuid() {
+        return _uuid;
+    }
+
+    public void setUuid(String _uuid) {
+        this._uuid = _uuid;
+    }
 
     public Object getId() {
         return _id;
@@ -82,6 +91,14 @@ public class User {
 
     public void setUpdatedate(String updatedate) {
         this.updatedate = updatedate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
    
    
