@@ -3,6 +3,7 @@ package com.mmx.hackathon.manager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mmx.hackathon.dto.Notification;
+import com.mmx.hackathon.dto.Permission;
 import com.mmx.hackathon.util.Constants;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,5 +25,11 @@ public class NotificationManager {
         conditionMap.put("toid", toid);
         conditionMap.put("status", status);
         return DBManager.getDB().getByCondition(Constants.NOTIFICATION_TABLE, conditionMap);
+    }
+
+    public boolean update(Notification n) throws Exception {
+        String json = new Gson().toJson(n, new TypeToken<Permission>() {
+        }.getType());
+        return DBManager.getDB().modify(Constants.PERMISSION_TABLE, json, ((Map<String, String>) n.getId()).get("$oid"));
     }
 }

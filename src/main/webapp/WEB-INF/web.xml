@@ -8,6 +8,30 @@
         <servlet-name>SearchQueryService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.SearchQueryService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InstallationService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.InstallationService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddPermissionService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.AddPermissionService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FetchPermissionService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.FetchPermissionService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdatePermissionService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.UpdatePermissionService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FetchNotificationService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.FetchNotificationService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateNotificationService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.UpdateNotificationService</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegistrationService</servlet-name>
         <url-pattern>/Registration</url-pattern>
@@ -15,6 +39,30 @@
     <servlet-mapping>
         <servlet-name>SearchQueryService</servlet-name>
         <url-pattern>/SearchQuery</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InstallationService</servlet-name>
+        <url-pattern>/Installation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddPermissionService</servlet-name>
+        <url-pattern>/AddPermission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FetchPermissionService</servlet-name>
+        <url-pattern>/FetchPermission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdatePermissionService</servlet-name>
+        <url-pattern>/UpdatePermission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FetchNotificationService</servlet-name>
+        <url-pattern>/FetchNotification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateNotificationService</servlet-name>
+        <url-pattern>/UpdateNotification</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
