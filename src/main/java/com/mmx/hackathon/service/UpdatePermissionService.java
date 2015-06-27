@@ -1,5 +1,9 @@
 package com.mmx.hackathon.service;
 
+import com.google.gson.Gson;
+import com.mmx.hackathon.manager.NotificationManager;
+import com.mmx.hackathon.manager.PermissionManager;
+import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,8 +20,19 @@ public class UpdatePermissionService extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
+        PrintWriter out = response.getWriter();
+        try {
+            //get the data from UI
+            String permissionid = request.getParameter("permissionid");
+            String status = request.getParameter("status");
+            boolean flag = new PermissionManager().update(permissionid, status);
+            if (flag) {
+                out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
+            } else {
+                out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+            }
+        } catch (Exception ex) {
+            out.write(new Gson().toJson(Constants.ERROR));
         }
     }
 

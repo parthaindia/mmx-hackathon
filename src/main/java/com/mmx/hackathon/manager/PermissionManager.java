@@ -56,4 +56,22 @@ public class PermissionManager {
         return DBManager.getDB().modify(Constants.PERMISSION_TABLE, json, ((Map<String, String>) p.getId()).get("$oid"));
     }
 
+    public boolean update(String permissionid, String status) throws Exception {
+        if (permissionid == null || permissionid.isEmpty() || status == null || status.isEmpty()) {
+            return false;
+        }
+        String exist_permission = DBManager.getDB().getByKey(Constants.NOTIFICATION_TABLE, permissionid);
+        if (exist_permission == null || exist_permission.isEmpty()) {
+            return false;
+        } else {
+            List<Permission> notifications = new Gson().fromJson(exist_permission, new TypeToken<List<Permission>>() {
+            }.getType());
+            Permission n = notifications.get(0);
+            n.setStatus(status);
+            String json = new Gson().toJson(n, new TypeToken<Permission>() {
+            }.getType());
+            return DBManager.getDB().modify(Constants.NOTIFICATION_TABLE, json, permissionid);
+        }
+    }
+
 }
