@@ -53,14 +53,14 @@ public class NotificationManager {
     }
 
     public void addNotification(String json) throws Exception {
-        List<Permission> permissions = new Gson().fromJson(json, new TypeToken<List<Permission>>() {
+        //add notifications to both the users
+        Permission p = new Gson().fromJson(json, new TypeToken<Permission>() {
         }.getType());
-        Permission p = permissions.get(0);
         Notification n = new Notification();
         n.setCreatedate(System.currentTimeMillis() + "");
         n.setFileid(p.getFileid());
         n.setFromid(p.getLoginid());
-        n.setMsg("");
+        n.setMsg("You have recieved a file from " + p.getLoginid());
         n.setStatus("fresh");
         n.setToid(p.getRecieverid());
         json = new Gson().toJson(n, new TypeToken<Notification>() {

@@ -48,6 +48,10 @@
         <servlet-name>RevokePermissionService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.RevokePermissionService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>WelcomeService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.WelcomeService</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegistrationService</servlet-name>
         <url-pattern>/Registration</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>RevokePermissionService</servlet-name>
         <url-pattern>/RevokePermission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WelcomeService</servlet-name>
+        <url-pattern>/Welcome</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

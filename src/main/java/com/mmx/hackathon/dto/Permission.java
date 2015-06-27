@@ -10,7 +10,7 @@ public class Permission {
     private String loginid;
     private String fileid;
     private String filename;
-    private String extenstion;
+    private String extension;
     private String securitycode;
     private String time;
     private String status;
@@ -42,12 +42,12 @@ public class Permission {
         this.filename = filename;
     }
 
-    public String getExtenstion() {
-        return extenstion;
+    public String getExtension() {
+        return extension;
     }
 
-    public void setExtenstion(String extenstion) {
-        this.extenstion = extenstion;
+    public void setExtension(String extenstion) {
+        this.extension = extenstion;
     }
 
     public String getSecuritycode() {
