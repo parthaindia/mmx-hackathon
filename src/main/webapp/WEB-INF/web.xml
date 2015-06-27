@@ -8,6 +8,14 @@
         <servlet-name>SearchQueryService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.SearchQueryService</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>FileUploadService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.FileUploadService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FetchFileService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.FetchFileService</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>InstallationService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.InstallationService</servlet-class>
@@ -47,6 +55,14 @@
     <servlet-mapping>
         <servlet-name>AddPermissionService</servlet-name>
         <url-pattern>/AddPermission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileUploadService</servlet-name>
+        <url-pattern>/FileUpload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FetchFileService</servlet-name>
+        <url-pattern>/FetchFile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FetchPermissionService</servlet-name>
