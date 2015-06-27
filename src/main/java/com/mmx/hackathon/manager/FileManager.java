@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,9 +146,25 @@ public class FileManager {
     public String fetchallUserFiles(String loginid) throws Exception {
         Map params = new HashMap();
         params.put("OwnerID", loginid);
-        String json = DBManager.getDB().getByCondition(Constants.FILE_TABLE, params);
-        return json;
-
+        String json = DBManager.getDB().getByCondition(loginid, params);
+        ArrayList retList = new ArrayList();
+        if (json != null && !json.isEmpty()) {
+            Type type = new TypeToken<List<FileHolder>>() {
+            }.getType();
+            List<FileHolder> fHolder = new Gson().fromJson(json, type);
+            for (FileHolder fl : fHolder) {
+                Map mp = new HashMap();
+                Map<String, String> idMap = (Map<String, String>) fl.getId();
+                String id = idMap.get("$oid");
+                mp.put("fileId", id);
+                mp.put("fileName", fl.getFilename().substring(0, fl.getFileName().indexOf("@")));
+                mp.put("mimeType", fl.getMimeType());
+                retList.add(mp);
+                
+            }
+        }
+        String retJson = new Gson().toJson(retList);
+        return retJson;
     }
 
     public FileHolder downloadFile(String fileHolderId) throws Exception {
