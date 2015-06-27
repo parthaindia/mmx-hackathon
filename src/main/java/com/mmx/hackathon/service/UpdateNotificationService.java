@@ -1,13 +1,10 @@
 package com.mmx.hackathon.service;
 
 import com.google.gson.Gson;
-import com.mmx.hackathon.dto.Notification;
 import com.mmx.hackathon.manager.NotificationManager;
-import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,12 +22,8 @@ public class UpdateNotificationService extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             //get the data from UI
-//            Map<String, String[]> arMap = request.getParameterMap();
-//            Map<String, String> inputMap = Common.getSingleMapValue(arMap);
             String notificationid = request.getParameter("notifiactionid");
             String status = request.getParameter("status");
-            //convert it into DTO
-//            Notification n = (Notification) new Common().mapToDto(inputMap, Notification.class);
             boolean flag = new NotificationManager().update(notificationid, status);
             if (flag) {
                 out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
