@@ -64,7 +64,6 @@ public class FileUploadService extends HttpServlet {
                     fileData.setInputStream(filecontent);
                     String status = new FileManager().uploadFile(fileData);
                     if (status!=null) {
-                        response.sendRedirect("../ico/jsp/patientExam.jsp");
                         request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
                         out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
                        
