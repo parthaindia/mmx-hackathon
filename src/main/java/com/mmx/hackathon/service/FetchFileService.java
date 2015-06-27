@@ -6,11 +6,9 @@
 package com.mmx.hackathon.service;
 
 import com.mmx.hackathon.manager.FileManager;
-import com.mmx.hackathon.manager.RegistrationManager;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +24,6 @@ public class FetchFileService extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String processId = UUID.randomUUID().toString();
         try {
             String loginid = request.getParameter("loginid");
             String status = new FileManager().fetchallUserFiles(loginid);

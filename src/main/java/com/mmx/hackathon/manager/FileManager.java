@@ -146,7 +146,7 @@ public class FileManager {
     public String fetchallUserFiles(String loginid) throws Exception {
         Map params = new HashMap();
         params.put("OwnerID", loginid);
-        String json = DBManager.getDB().getByCondition(loginid, params);
+        String json = DBManager.getDB().getByCondition(Constants.FILE_TABLE, params);
         ArrayList retList = new ArrayList();
         if (json != null && !json.isEmpty()) {
             Type type = new TypeToken<List<FileHolder>>() {
@@ -157,10 +157,11 @@ public class FileManager {
                 Map<String, String> idMap = (Map<String, String>) fl.getId();
                 String id = idMap.get("$oid");
                 mp.put("fileId", id);
-                mp.put("fileName", fl.getFilename().substring(0, fl.getFileName().indexOf("@")));
+                mp.put("fileName", fl.getFileName().substring(0, fl.getFileName().indexOf("@")));
                 mp.put("mimeType", fl.getMimeType());
+                mp.put("createdate", fl.getCreatedate());
                 retList.add(mp);
-                
+
             }
         }
         String retJson = new Gson().toJson(retList);

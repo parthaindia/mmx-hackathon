@@ -12,7 +12,7 @@ public class FileHolder {
     private Object _id;
     private String loginid;
     private String email;
-    private String filename;
+//    private String filename;
     private String extenstion;
     private String size;
     private String createdate;
@@ -56,13 +56,13 @@ public class FileHolder {
         this.loginid = loginid;
     }
 
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
+//    public String getFilename() {
+//        return filename;
+//    }
+//
+//    public void setFilename(String filename) {
+//        this.filename = filename;
+//    }
 
     public String getExtenstion() {
         return extenstion;
