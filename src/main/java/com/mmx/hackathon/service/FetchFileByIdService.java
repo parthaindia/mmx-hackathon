@@ -10,12 +10,14 @@ import com.mmx.hackathon.dto.FileHolder;
 import com.mmx.hackathon.manager.FileManager;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 /**
  *
@@ -23,25 +25,37 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class FetchFileByIdService extends HttpServlet {
 
-     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-    
+        OutputStream out = response.getOutputStream();
+
         try {
             String fileId = request.getParameter("fileId");
-            FileHolder status = new FileManager().downloadFile(fileId);
-            if (status!=null) {
+            FileHolder fileHolder = new FileManager().downloadFile(fileId);
+
+            if (fileHolder != null) {
+                String mimeType = fileHolder.getMimeType();
+                if (mimeType == null) {
+                    mimeType = "appliction/octet-stream";
+                }
+                response.setContentType(mimeType);
+                if (fileHolder.getFileExt().equals("pdf") || fileHolder.getFileExt().equals("doc")) {
+                    response.setHeader("Content-Disposition", "inline;filename=" + fileHolder.getFileName() + "." + fileHolder.getFileExt());
+                }
                 request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
-                out.write(new Gson().toJson(status));
+                //out.write(new Gson().toJson(fileHolder));
+                ByteArrayOutputStream baos = fileHolder.getBaos();
+                byte b[] = baos.toByteArray();
+                out.write(b);
 
             } else {
                 request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
-                out.write(Constants.HTTP_STATUS_FAIL);
+                out.write(Constants.HTTP_STATUS_FAIL.getBytes());
             }
         } catch (Exception ex) {
             System.out.println("Exception::::" + ex);
-            out.write(Constants.HTTP_STATUS_EXCEPTION);
+            out.write(Constants.HTTP_STATUS_EXCEPTION.getBytes());
 
         } finally {
             out.close();
