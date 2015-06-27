@@ -22,20 +22,28 @@ public class InstallationService extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            String input = request.getParameter("regmap");
-            Map<String, String> inputMap = new Gson().fromJson(input, new TypeToken<Map<String, String>>() {
-            }.getType());
+            //get the data from UI
+            Map<String, String[]> arMap = request.getParameterMap();
+            Map<String, String> inputMap = Common.getSingleMapValue(arMap);
+            
+            //convert it into DTO
             Installation i = (Installation) new Common().mapToDto(inputMap, Installation.class);
-            String id = new InstallationManager().add(i);
-            if (id == null || id.isEmpty()) {
-                out.write(new Gson().toJson(Constants.FAIL));
+            //check the login id existance
+            boolean status = new InstallationManager().checkUserAvailability(i.getLoginid());
+            if (status) {
+                out.write(new Gson().toJson(Constants.HTTP_USER_EXIST));
             } else {
-                out.write(new Gson().toJson(Constants.SUCCESS));
+                i.setCreatedate(System.currentTimeMillis() + "");
+                String id = new InstallationManager().add(i);
+                if (id == null || id.isEmpty()) {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+                } else {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
+                }
             }
-
         } catch (Exception ex) {
             out.write(new Gson().toJson(Constants.ERROR));
         }

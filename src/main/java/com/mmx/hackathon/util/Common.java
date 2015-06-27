@@ -1,7 +1,10 @@
 package com.mmx.hackathon.util;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.configuration.ConfigurationException;
@@ -21,6 +24,26 @@ public class Common {
             Logger.getLogger(Common.class.getName()).log(Level.SEVERE, null, ex);
         }
         return config;
+    }
+
+    public static Map<String, String> getSingleMapValue(Map<String, String[]> map) {
+
+        if ((map == null) || (map.isEmpty())) {
+            return null;
+        }
+
+        Map<String, String> newMap = new HashMap<String, String>();
+        if (map != null && !map.isEmpty()) {
+            Set keyset = map.keySet();
+            Iterator it = keyset.iterator();
+            while (it.hasNext()) {
+                String key = (String) it.next();
+                if (map.get(key) != null && map.get(key).length > 0) {
+                    newMap.put(key, map.get(key)[0]);
+                }
+            }
+        }
+        return newMap;
     }
 
     public Object mapToDto(Map<String, String> inputMap, Class c) throws Exception {
