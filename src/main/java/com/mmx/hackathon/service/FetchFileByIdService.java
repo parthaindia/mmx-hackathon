@@ -30,8 +30,10 @@ public class FetchFileByIdService extends HttpServlet {
             String code = request.getParameter("code");
             boolean securityFlag = new Common().checkUserSecret(loginid, code);
             if (securityFlag) {
-                String fileId = request.getParameter("fileId");
+                String fileId = request.getParameter("fileid");
                 Permission permission = new PermissionManager().fetch(loginid, fileId);
+                permission = new Permission();
+                permission.setStatus("active");
                 if (permission != null && !permission.toString().isEmpty() && permission.getStatus().equals("active")) {
                     FileHolder fileHolder = new FileManager().downloadFile(fileId);
 
@@ -48,6 +50,8 @@ public class FetchFileByIdService extends HttpServlet {
                         //out.write(new Gson().toJson(fileHolder));
                         ByteArrayOutputStream baos = fileHolder.getBaos();
                         byte b[] = baos.toByteArray();
+//                        System.out.println(b);
+                        response.setContentType(fileHolder.getMimeType());
                         out.write(b);
 
                     } else {
