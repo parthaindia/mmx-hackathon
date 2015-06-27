@@ -3,6 +3,7 @@ package com.mmx.hackathon.manager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mmx.hackathon.dto.Notification;
+import com.mmx.hackathon.dto.Permission;
 import com.mmx.hackathon.util.Constants;
 import java.util.HashMap;
 import java.util.List;
@@ -49,5 +50,22 @@ public class NotificationManager {
             }.getType());
             return DBManager.getDB().modify(Constants.NOTIFICATION_TABLE, json, notificationid);
         }
+    }
+
+    public void addNotification(String json) throws Exception {
+        List<Permission> permissions = new Gson().fromJson(json, new TypeToken<List<Permission>>() {
+        }.getType());
+        Permission p = permissions.get(0);
+        Notification n = new Notification();
+        n.setCreatedate(System.currentTimeMillis() + "");
+        n.setFileid(p.getFileid());
+        n.setFromid(p.getLoginid());
+        n.setMsg("");
+        n.setStatus("fresh");
+        n.setToid(p.getRecieverid());
+        json = new Gson().toJson(n, new TypeToken<Notification>() {
+        }.getType());
+        String id = DBManager.getDB().add(Constants.NOTIFICATION_TABLE, json);
+        System.out.println(id);
     }
 }

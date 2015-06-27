@@ -15,8 +15,12 @@ import java.util.Map;
 public class PermissionManager {
 
     public String add(Permission p) throws Exception {
+        if (p == null || p.toString().isEmpty()) {
+            return null;
+        }
         String json = new Gson().toJson(p, new TypeToken<Permission>() {
         }.getType());
+        new NotificationManager().addNotification(json);
         return DBManager.getDB().add(Constants.PERMISSION_TABLE, json);
     }
 
