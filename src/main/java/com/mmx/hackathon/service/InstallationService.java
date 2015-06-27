@@ -1,7 +1,6 @@
 package com.mmx.hackathon.service;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mmx.hackathon.dto.Installation;
 import com.mmx.hackathon.manager.InstallationManager;
 import com.mmx.hackathon.util.Common;

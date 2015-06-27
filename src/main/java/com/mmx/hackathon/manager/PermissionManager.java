@@ -33,7 +33,21 @@ public class PermissionManager {
         if (permissions == null || permissions.isEmpty()) {
             return null;
         }
-        return permissions.get(0);
+
+        Permission permission = permissions.get(0);
+        long time = Long.parseLong(permission.getTime()) * 60 * 1000;
+        long createdtime = Long.parseLong(permission.getCreatedate());
+        if ((createdtime + time) > System.currentTimeMillis()) {
+            return permission;
+        } else {
+            permission.setStatus("false");
+            boolean flag = update(permission);
+            if (flag) {
+                return permission;
+            } else {
+                return null;
+            }
+        }
     }
 
     public boolean update(Permission p) throws Exception {

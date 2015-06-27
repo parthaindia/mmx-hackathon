@@ -46,7 +46,7 @@ public interface Constants {
     public static final String PERMISSION_TABLE = "permission";
     public static final String NOTIFICATION_TABLE = "notification";
     public static String FILE_TABLE="file";
-    public static String FILE_PATH="/Users/shravanigv/Desktop/Rakshith";
+    public static String FILE_PATH="/home/accure/Desktop/Hack";
    
 
 }

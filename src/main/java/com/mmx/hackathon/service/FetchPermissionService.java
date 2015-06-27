@@ -1,7 +1,14 @@
 package com.mmx.hackathon.service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mmx.hackathon.dto.Permission;
+import com.mmx.hackathon.manager.PermissionManager;
+import com.mmx.hackathon.util.Common;
+import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +22,24 @@ public class FetchPermissionService extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        response.setContentType("text/json;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try {
+            //get the data from UI
+            Map<String, String[]> arMap = request.getParameterMap();
+            Map<String, String> inputMap = Common.getSingleMapValue(arMap);
 
+            //convert it into DTO
+            Permission p = (Permission) new Common().mapToDto(inputMap, Permission.class);
+            Permission permission = new PermissionManager().fetch(p.getLoginid(), p.getFileid());
+            if (permission == null) {
+                out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+            } else {
+                out.write(new Gson().toJson(permission.getStatus(), new TypeToken<String>() {
+                }.getType()));
+            }
+        } catch (Exception ex) {
+            out.write(new Gson().toJson(Constants.ERROR));
         }
     }
 

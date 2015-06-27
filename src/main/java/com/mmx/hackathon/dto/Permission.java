@@ -12,6 +12,7 @@ public class Permission {
     private String filename;
     private String extenstion;
     private String securitycode;
+    private String time;
     private String status;
     private String createdate;
     private String updatedate;
@@ -95,6 +96,14 @@ public class Permission {
 
     public void setLoginid(String loginid) {
         this.loginid = loginid;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
 }
