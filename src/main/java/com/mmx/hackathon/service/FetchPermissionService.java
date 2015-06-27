@@ -25,18 +25,23 @@ public class FetchPermissionService extends HttpServlet {
         response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            //get the data from UI
-            Map<String, String[]> arMap = request.getParameterMap();
-            Map<String, String> inputMap = Common.getSingleMapValue(arMap);
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                //get the data from UI
+                Map<String, String[]> arMap = request.getParameterMap();
+                Map<String, String> inputMap = Common.getSingleMapValue(arMap);
 
-            //convert it into DTO
-            Permission p = (Permission) new Common().mapToDto(inputMap, Permission.class);
-            Permission permission = new PermissionManager().fetch(p.getLoginid(), p.getFileid());
-            if (permission == null) {
-                out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
-            } else {
-                out.write(new Gson().toJson(permission.getStatus(), new TypeToken<String>() {
-                }.getType()));
+                //convert it into DTO
+                Permission p = (Permission) new Common().mapToDto(inputMap, Permission.class);
+                Permission permission = new PermissionManager().fetch(p.getLoginid(), p.getFileid());
+                if (permission == null) {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+                } else {
+                    out.write(new Gson().toJson(permission.getStatus(), new TypeToken<String>() {
+                    }.getType()));
+                }
             }
         } catch (Exception ex) {
             out.write(new Gson().toJson(Constants.ERROR));

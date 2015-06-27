@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mmx.hackathon.service;
 
 import com.google.gson.Gson;
 import com.mmx.hackathon.manager.FourSquareQuery;
+import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 
 import java.io.IOException;
@@ -30,15 +26,19 @@ public class SearchQueryService extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            String latitude = request.getParameter("latitude");
-            String longitude = request.getParameter("longitude");//HougjGKsd6mshiXvuUCRCD0MyhR8p1waKoljsnnMvb8IRLE07A
-            String search_query = request.getParameter("search_query");
-            
-            List<HashMap> output = new FourSquareQuery().userInfoQuery(latitude, longitude, search_query);
-            if(output!=null&&!output.isEmpty()){
-                out.write(new Gson().toJson(output));
-            }
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                String latitude = request.getParameter("latitude");
+                String longitude = request.getParameter("longitude");//HougjGKsd6mshiXvuUCRCD0MyhR8p1waKoljsnnMvb8IRLE07A
+                String search_query = request.getParameter("search_query");
 
+                List<HashMap> output = new FourSquareQuery().userInfoQuery(latitude, longitude, search_query);
+                if (output != null && !output.isEmpty()) {
+                    out.write(new Gson().toJson(output));
+                }
+            }
         } catch (Exception ex) {
             request.setAttribute("statuscode", Constants.HTTP_STATUS_EXCEPTION);
             out.write(new Gson().toJson(Constants.HTTP_STATUS_EXCEPTION));

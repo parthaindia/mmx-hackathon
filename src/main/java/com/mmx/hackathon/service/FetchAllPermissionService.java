@@ -2,6 +2,7 @@ package com.mmx.hackathon.service;
 
 import com.google.gson.Gson;
 import com.mmx.hackathon.manager.PermissionManager;
+import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,11 +23,15 @@ public class FetchAllPermissionService extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String loginid = request.getParameter("loginid");
-            String json = new PermissionManager().fetchAll(loginid);
-            if (json == null || json.isEmpty()) {
-                out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
-            } else {
-                out.write(json);
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                String json = new PermissionManager().fetchAll(loginid);
+                if (json == null || json.isEmpty()) {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+                } else {
+                    out.write(json);
+                }
             }
         } catch (Exception ex) {
 

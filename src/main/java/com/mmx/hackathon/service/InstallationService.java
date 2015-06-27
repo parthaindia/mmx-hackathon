@@ -24,6 +24,10 @@ public class InstallationService extends HttpServlet {
         response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
             //get the data from UI
             Map<String, String[]> arMap = request.getParameterMap();
             Map<String, String> inputMap = Common.getSingleMapValue(arMap);
@@ -43,6 +47,7 @@ public class InstallationService extends HttpServlet {
                     out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
                 }
             }
+        }
         } catch (Exception ex) {
             out.write(new Gson().toJson(Constants.ERROR));
         }

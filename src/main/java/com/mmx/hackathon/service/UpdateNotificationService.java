@@ -2,6 +2,7 @@ package com.mmx.hackathon.service;
 
 import com.google.gson.Gson;
 import com.mmx.hackathon.manager.NotificationManager;
+import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,14 +22,19 @@ public class UpdateNotificationService extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            //get the data from UI
-            String notificationid = request.getParameter("notifiactionid");
-            String status = request.getParameter("status");
-            boolean flag = new NotificationManager().update(notificationid, status);
-            if (flag) {
-                out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
-            } else {
-                out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                //get the data from UI
+                String notificationid = request.getParameter("notifiactionid");
+                String status = request.getParameter("status");
+                boolean flag = new NotificationManager().update(notificationid, status);
+                if (flag) {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
+                } else {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+                }
             }
         } catch (Exception ex) {
             out.write(new Gson().toJson(Constants.ERROR));

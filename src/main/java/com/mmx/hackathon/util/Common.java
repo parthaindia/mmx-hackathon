@@ -1,5 +1,6 @@
 package com.mmx.hackathon.util;
 
+import com.mmx.hackathon.manager.DBManager;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -59,5 +60,17 @@ public class Common {
             }
         }
         return dtoObject;
+    }
+
+    public boolean checkUserSecret(String loginid, String code) throws Exception {
+//        if (loginid == null || loginid.isEmpty() || code == null || code.isEmpty()) {
+//            return false;
+//        }
+//        Map<String, String> condionMap = new HashMap<>();
+//        condionMap.put("code", code);
+//        condionMap.put("loginid", loginid);
+//        String json = DBManager.getDB().getByCondition("securecode", condionMap);
+//        return json != null && !json.isEmpty();
+        return true;
     }
 }

@@ -1,14 +1,12 @@
 package com.mmx.hackathon.service;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mmx.hackathon.dto.Notification;
 import com.mmx.hackathon.manager.NotificationManager;
 import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,21 +24,25 @@ public class FetchNotificationService extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            //get the data from UI
-            Map<String, String[]> arMap = request.getParameterMap();
-            Map<String, String> inputMap = Common.getSingleMapValue(arMap);
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                //get the data from UI
+                Map<String, String[]> arMap = request.getParameterMap();
+                Map<String, String> inputMap = Common.getSingleMapValue(arMap);
 
-            //convert it into DTO
-            Notification n = (Notification) new Common().mapToDto(inputMap, Notification.class);
-            String json = new NotificationManager().fetch(n.getToid(), n.getStatus());
-            if (json == null || json.isEmpty()) {
-                out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
-            } else {
+                //convert it into DTO
+                Notification n = (Notification) new Common().mapToDto(inputMap, Notification.class);
+                String json = new NotificationManager().fetch(n.getToid(), n.getStatus());
+                if (json == null || json.isEmpty()) {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+                } else {
 //                List<Notification> nots = new Gson().fromJson(json, new TypeToken<List<Notification>>() {
 //                }.getType());
-                out.write(json);
+                    out.write(json);
+                }
             }
-
         } catch (Exception ex) {
             out.write(new Gson().toJson(Constants.ERROR));
         }

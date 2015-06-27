@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mmx.hackathon.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mmx.hackathon.dto.FileHolder;
 import com.mmx.hackathon.manager.FileManager;
+import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
 @MultipartConfig
 /**
  *
@@ -33,52 +30,52 @@ public class FileUploadService extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-   
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
         try {
-         
-                    
-                    Part filePart = request.getPart("fileContent");
-                    InputStream filecontent = filePart.getInputStream();
-                    String keyWord = request.getParameter("keyWord");
-                    String description = request.getParameter("description");
-                    String srcfilepath = request.getParameter("srcfilepath");
-                    String loginid=request.getParameter("loginid");
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
 
-                    File file = new File(srcfilepath);
-                    String fileName = file.getName();
+                Part filePart = request.getPart("fileContent");
+                InputStream filecontent = filePart.getInputStream();
+                String keyWord = request.getParameter("keyWord");
+                String description = request.getParameter("description");
+                String srcfilepath = request.getParameter("srcfilepath");
 
-                    FileHolder fileData = new FileHolder();
-                    fileData.setOwnerID(loginid);
-                    fileData.setKey(keyWord);
-                    fileData.setMimeType(URLConnection.guessContentTypeFromName(file.getName()));
-                    fileData.setDescription(description);
-                    fileData.setSrcfilepath(srcfilepath);
-                    fileData.setFileName(fileName);
-                    fileData.setStatus(Constants.ACTIVE);
-                    Type type = new TypeToken<File>() {
-                    }.getType();
-                  
-                    fileData.setInputStream(filecontent);
-                    String status = new FileManager().uploadFile(fileData);
-                    if (status!=null) {
-                        request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
-                        out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
-                       
-                    } else {
-                        request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
-                        out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
-                        
-                    }
+                File file = new File(srcfilepath);
+                String fileName = file.getName();
 
+                FileHolder fileData = new FileHolder();
+                fileData.setOwnerID(loginid);
+                fileData.setKey(keyWord);
+                fileData.setMimeType(URLConnection.guessContentTypeFromName(file.getName()));
+                fileData.setDescription(description);
+                fileData.setSrcfilepath(srcfilepath);
+                fileData.setFileName(fileName);
+                fileData.setStatus(Constants.ACTIVE);
+                Type type = new TypeToken<File>() {
+                }.getType();
 
+                fileData.setInputStream(filecontent);
+                String status = new FileManager().uploadFile(fileData);
+                if (status != null) {
+                    request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
+
+                } else {
+                    request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+
+                }
+
+            }
         } catch (Exception ex) {
-            request.setAttribute("statuscode",Constants.HTTP_STATUS_EXCEPTION);
+            request.setAttribute("statuscode", Constants.HTTP_STATUS_EXCEPTION);
             StringWriter stack = new StringWriter();
             ex.printStackTrace(new PrintWriter(stack));
-            
+
         } finally {
             out.close();
         }

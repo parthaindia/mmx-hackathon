@@ -4,6 +4,7 @@ import com.mmx.hackathon.dto.FileHolder;
 import com.mmx.hackathon.dto.Permission;
 import com.mmx.hackathon.manager.FileManager;
 import com.mmx.hackathon.manager.PermissionManager;
+import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,29 +27,33 @@ public class FetchFileByIdService extends HttpServlet {
 
         try {
             String loginid = request.getParameter("loginid");
-            String fileId = request.getParameter("fileId");
-            Permission permission = new PermissionManager().fetch(loginid, fileId);
-            if (permission != null && !permission.toString().isEmpty() && permission.getStatus().equals("active")) {
-                FileHolder fileHolder = new FileManager().downloadFile(fileId);
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                String fileId = request.getParameter("fileId");
+                Permission permission = new PermissionManager().fetch(loginid, fileId);
+                if (permission != null && !permission.toString().isEmpty() && permission.getStatus().equals("active")) {
+                    FileHolder fileHolder = new FileManager().downloadFile(fileId);
 
-                if (fileHolder != null) {
-                    String mimeType = fileHolder.getMimeType();
-                    if (mimeType == null) {
-                        mimeType = "appliction/octet-stream";
-                    }
-                    response.setContentType(mimeType);
-                    if (fileHolder.getFileExt().equals("pdf") || fileHolder.getFileExt().equals("doc")) {
-                        response.setHeader("Content-Disposition", "inline;filename=" + fileHolder.getFileName() + "." + fileHolder.getFileExt());
-                    }
-                    request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
-                    //out.write(new Gson().toJson(fileHolder));
-                    ByteArrayOutputStream baos = fileHolder.getBaos();
-                    byte b[] = baos.toByteArray();
-                    out.write(b);
+                    if (fileHolder != null) {
+                        String mimeType = fileHolder.getMimeType();
+                        if (mimeType == null) {
+                            mimeType = "appliction/octet-stream";
+                        }
+                        response.setContentType(mimeType);
+                        if (fileHolder.getFileExt().equals("pdf") || fileHolder.getFileExt().equals("doc")) {
+                            response.setHeader("Content-Disposition", "inline;filename=" + fileHolder.getFileName() + "." + fileHolder.getFileExt());
+                        }
+                        request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
+                        //out.write(new Gson().toJson(fileHolder));
+                        ByteArrayOutputStream baos = fileHolder.getBaos();
+                        byte b[] = baos.toByteArray();
+                        out.write(b);
 
-                } else {
-                    request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
-                    out.write(Constants.HTTP_STATUS_FAIL.getBytes());
+                    } else {
+                        request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
+                        out.write(Constants.HTTP_STATUS_FAIL.getBytes());
+                    }
                 }
             }
         } catch (Exception ex) {

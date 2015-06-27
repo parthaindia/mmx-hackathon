@@ -24,19 +24,24 @@ public class AddPermissionService extends HttpServlet {
         response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            //get the data from UI
-            Map<String, String[]> arMap = request.getParameterMap();
-            Map<String, String> inputMap = Common.getSingleMapValue(arMap);
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                //get the data from UI
+                Map<String, String[]> arMap = request.getParameterMap();
+                Map<String, String> inputMap = Common.getSingleMapValue(arMap);
 
-            //convert it into DTO
-            Permission p = (Permission) new Common().mapToDto(inputMap, Permission.class);
-            p.setCreatedate(System.currentTimeMillis()+"");
-            p.setStatus("active");
-            String id = new PermissionManager().add(p);
-            if (id == null || id.isEmpty()) {
-                out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
-            } else {
-                out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
+                //convert it into DTO
+                Permission p = (Permission) new Common().mapToDto(inputMap, Permission.class);
+                p.setCreatedate(System.currentTimeMillis() + "");
+                p.setStatus("active");
+                String id = new PermissionManager().add(p);
+                if (id == null || id.isEmpty()) {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+                } else {
+                    out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
+                }
             }
         } catch (Exception ex) {
             out.write(new Gson().toJson(Constants.ERROR));

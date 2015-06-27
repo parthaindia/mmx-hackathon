@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mmx.hackathon.service;
 
 import com.mmx.hackathon.manager.FileManager;
+import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,14 +22,18 @@ public class FetchFileService extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String loginid = request.getParameter("loginid");
-            String status = new FileManager().fetchallUserFiles(loginid);
-            if (status!=null) {
-                request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
-                out.write(status);
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                String status = new FileManager().fetchallUserFiles(loginid);
+                if (status != null) {
+                    request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
+                    out.write(status);
 
-            } else {
-                request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
-                out.write(Constants.HTTP_STATUS_FAIL);
+                } else {
+                    request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
+                    out.write(Constants.HTTP_STATUS_FAIL);
+                }
             }
         } catch (Exception ex) {
             System.out.println("Exception::::" + ex);

@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mmx.hackathon.service;
 
 import com.mmx.hackathon.manager.RegistrationManager;
+import com.mmx.hackathon.util.Common;
 import com.mmx.hackathon.util.Constants;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,23 +15,28 @@ import javax.servlet.http.HttpServletResponse;
  * @author Partha
  */
 public class RegistrationService extends HttpServlet {
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String processId = UUID.randomUUID().toString();
         try {
-            String gcmId = request.getParameter("gcm_id");
-            String countryCode = request.getParameter("country_code");
-            String imei = request.getParameter("imei");
-            boolean status = new RegistrationManager().registration(gcmId, countryCode, imei);
-            if (status) {
-                request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
-                out.write(Constants.HTTP_STATUS_SUCCESS);
+            String loginid = request.getParameter("loginid");
+            String code = request.getParameter("code");
+            boolean securityFlag = new Common().checkUserSecret(loginid, code);
+            if (securityFlag) {
+                String gcmId = request.getParameter("gcm_id");
+                String countryCode = request.getParameter("country_code");
+                String imei = request.getParameter("imei");
+                boolean status = new RegistrationManager().registration(gcmId, countryCode, imei);
+                if (status) {
+                    request.setAttribute("statuscode", Constants.HTTP_STATUS_SUCCESS);
+                    out.write(Constants.HTTP_STATUS_SUCCESS);
 
-            } else {
-                request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
-                out.write(Constants.HTTP_STATUS_FAIL);
+                } else {
+                    request.setAttribute("statuscode", Constants.HTTP_STATUS_FAIL);
+                    out.write(Constants.HTTP_STATUS_FAIL);
+                }
             }
         } catch (Exception ex) {
             System.out.println("Exception::::" + ex);
