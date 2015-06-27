@@ -160,6 +160,7 @@ public class FileManager {
                 mp.put("fileName", fl.getFilename().substring(0, fl.getFileName().indexOf("@")));
                 mp.put("mimeType", fl.getMimeType());
                 retList.add(mp);
+                
             }
         }
         String retJson = new Gson().toJson(retList);
