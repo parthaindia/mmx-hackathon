@@ -26,7 +26,8 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Partha
  */
 public class FileManager {
-     public String uploadFile(FileHolder fileData) throws Exception {
+
+    public String uploadFile(FileHolder fileData) throws Exception {
         String id = null;
         if (fileData == null
                 || fileData.getFileName() == null
@@ -55,15 +56,15 @@ public class FileManager {
                 String fileName = inputFileName.replace("." + extension, "");
                 String ouputFileName = fileName + "@" + UUID.randomUUID().toString();
 
-                String dest =Constants.FILE_PATH+ "/" + ouputFileName + "." + extension;
+                String dest = Constants.FILE_PATH + "/" + ouputFileName + "." + extension;
                 //set the new file name to the FileHolder object
                 fileData.setFileName(ouputFileName);
                 fileData.setFileExt(extension);
                 //set the new path url
                 fileData.setPathURL(dest);
-                if(fileData.getMimeType()==null||fileData.getMimeType().equals("")&&(!(fileData.getFileExt()==null||fileData.getFileExt().equals("")))){
-                    Map<String,String> mimeMap=(new FileManager().mimeMap(fileData.getFileExt()));
-                    fileData.setMimeType(mimeMap.get("."+fileData.getFileExt()));
+                if (fileData.getMimeType() == null || fileData.getMimeType().equals("") && (!(fileData.getFileExt() == null || fileData.getFileExt().equals("")))) {
+                    Map<String, String> mimeMap = (new FileManager().mimeMap(fileData.getFileExt()));
+                    fileData.setMimeType(mimeMap.get("." + fileData.getFileExt()));
                 }
                 InputStream is1 = fileData.getInputStream();
                 //add try and finally
@@ -129,7 +130,7 @@ public class FileManager {
                         fileData.setBaos(null);
                         fileData.setInputStream(null);
                         fileData.setId(null);
-                        boolean status = DBManager.getDB().modify(tableName,  new Gson().toJson(fileData, type), id);
+                        boolean status = DBManager.getDB().modify(tableName, new Gson().toJson(fileData, type), id);
                         if (!status) {
                             return null;
                         }
@@ -140,15 +141,16 @@ public class FileManager {
             return id;
         }
     }
-     public String fetchallUserFiles(String loginid) throws Exception{
-         Map params=new HashMap();
-         params.put("OwnerID", loginid);
-         String json=DBManager.getDB().getByCondition(loginid, params);
-         return json;
-         
-         
-     }
-         public FileHolder downloadFile(String fileHolderId) throws Exception {
+
+    public String fetchallUserFiles(String loginid) throws Exception {
+        Map params = new HashMap();
+        params.put("OwnerID", loginid);
+        String json = DBManager.getDB().getByCondition(Constants.FILE_TABLE, params);
+        return json;
+
+    }
+
+    public FileHolder downloadFile(String fileHolderId) throws Exception {
         if (fileHolderId == null || fileHolderId.equals("")) {
             return null;
         } else {
@@ -175,9 +177,8 @@ public class FileManager {
             }
         }
     }
-     
-     
-     public Map<String,String> mimeMap(String ext) {
+
+    public Map<String, String> mimeMap(String ext) {
         if (ext == null || ext.equals("")) {
             return null;
         }

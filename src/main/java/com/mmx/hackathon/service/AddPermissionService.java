@@ -30,6 +30,7 @@ public class AddPermissionService extends HttpServlet {
 
             //convert it into DTO
             Permission p = (Permission) new Common().mapToDto(inputMap, Permission.class);
+            p.setCreatedate(System.currentTimeMillis()+"");
             String id = new PermissionManager().add(p);
             if (id == null || id.isEmpty()) {
                 out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
