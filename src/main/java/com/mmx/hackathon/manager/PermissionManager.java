@@ -31,6 +31,7 @@ public class PermissionManager {
         Map<String, String> conditionMap = new HashMap<>();
         conditionMap.put("recieverid", loginid);
         conditionMap.put("fileid", fileid);
+        conditionMap.put("status", "active");
         String json = DBManager.getDB().getByCondition(Constants.PERMISSION_TABLE, conditionMap);
         List<Permission> permissions = new Gson().fromJson(json, new TypeToken<List<Permission>>() {
         }.getType());
@@ -76,6 +77,33 @@ public class PermissionManager {
             }.getType());
             return DBManager.getDB().modify(Constants.NOTIFICATION_TABLE, json, permissionid);
         }
+    }
+
+    public String fetchAll(String loginid) throws Exception {
+        if (loginid == null || loginid.isEmpty()) {
+            return null;
+        }
+        Map<String, String> conditionMap = new HashMap<>();
+        conditionMap.put("loginid", loginid);
+        conditionMap.put("status", "active");
+        return DBManager.getDB().getByCondition(Constants.PERMISSION_TABLE, conditionMap);
+    }
+
+    public boolean revokePermission(String permissionId) throws Exception {
+        if (permissionId == null || permissionId.isEmpty()) {
+            return false;
+        }
+        String json = DBManager.getDB().getByKey(Constants.PERMISSION_TABLE, permissionId);
+        if (json == null || json.isEmpty()) {
+            return false;
+        }
+        Permission permission = new Gson().fromJson(json, new TypeToken<Permission>() {
+        }.getType());
+        permission.setStatus("inactive");
+        permission.setUpdatedate(System.currentTimeMillis() + "");
+        json = new Gson().toJson(permission, new TypeToken<Permission>() {
+        }.getType());
+        return DBManager.getDB().modify(Constants.PERMISSION_TABLE, json, permissionId);
     }
 
 }

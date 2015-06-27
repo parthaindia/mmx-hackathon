@@ -8,7 +8,7 @@
         <servlet-name>SearchQueryService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.SearchQueryService</servlet-class>
     </servlet>
-     <servlet>
+    <servlet>
         <servlet-name>FileUploadService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.FileUploadService</servlet-class>
     </servlet>
@@ -39,6 +39,14 @@
     <servlet>
         <servlet-name>UpdateNotificationService</servlet-name>
         <servlet-class>com.mmx.hackathon.service.UpdateNotificationService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FetchAllPermissionService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.FetchAllPermissionService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RevokePermissionService</servlet-name>
+        <servlet-class>com.mmx.hackathon.service.RevokePermissionService</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RegistrationService</servlet-name>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>UpdateNotificationService</servlet-name>
         <url-pattern>/UpdateNotification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FetchAllPermissionService</servlet-name>
+        <url-pattern>/FetchAllPermission</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RevokePermissionService</servlet-name>
+        <url-pattern>/RevokePermission</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
