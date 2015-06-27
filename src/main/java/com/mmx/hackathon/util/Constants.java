@@ -10,6 +10,7 @@ package com.mmx.hackathon.util;
  * @author Partha
  */
 public interface Constants {
+
     public static final String SUCCESS = "success";
     public static final String FAIL = "fail";
     public static final String ERROR = "error";
@@ -34,11 +35,13 @@ public interface Constants {
     public static final String HTTP_STATUS_UNAUTHORIZED = "401";
     public static final String HTTP_STATUS_INVALID_SESSION = "403";
     public static final String HTTP_STATUS_EXCEPTION = "500";
-    
+
     public static final String DBSCHEMA = "masx";
     public static final String DBPORT = "27017";
     public static final String DBURL = "192.168.60.99";
-    public static String GOOGLE_KEY="";
-    public static String REGISTRATION_TABLE="user";
-   
+    public static String GOOGLE_KEY = "";
+    public static String REGISTRATION_TABLE = "user";
+    public static final String INSTALLATION_TABLE = "installation";
+    public static final String PERMISSION_TABLE = "permission";
+    public static final String NOTIFICATION_TABLE = "notification";
 }

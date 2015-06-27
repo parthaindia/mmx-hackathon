@@ -7,6 +7,7 @@ package com.mmx.hackathon.dto;
 public class Permission {
 
     private Object _id;
+    private String loginid;
     private String fileid;
     private String filename;
     private String extenstion;
@@ -87,5 +88,13 @@ public class Permission {
     public void setRecieverid(String recieverid) {
         this.recieverid = recieverid;
     }
-    
+
+    public String getLoginid() {
+        return loginid;
+    }
+
+    public void setLoginid(String loginid) {
+        this.loginid = loginid;
+    }
+
 }
