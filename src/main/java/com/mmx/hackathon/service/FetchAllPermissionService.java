@@ -19,7 +19,7 @@ public class FetchAllPermissionService extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             String loginid = request.getParameter("loginid");

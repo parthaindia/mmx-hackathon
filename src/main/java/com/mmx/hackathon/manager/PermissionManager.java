@@ -2,8 +2,10 @@ package com.mmx.hackathon.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mmx.hackathon.dto.FileHolder;
 import com.mmx.hackathon.dto.Permission;
 import com.mmx.hackathon.util.Constants;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +88,26 @@ public class PermissionManager {
         Map<String, String> conditionMap = new HashMap<>();
         conditionMap.put("loginid", loginid);
         conditionMap.put("status", "active");
-        return DBManager.getDB().getByCondition(Constants.PERMISSION_TABLE, conditionMap);
+        String json = DBManager.getDB().getByCondition(Constants.PERMISSION_TABLE, conditionMap);
+        List<Permission> pers = new Gson().fromJson(json, new TypeToken<List<Permission>>() {
+        }.getType());
+        List<Permission> resultpers = new ArrayList<>();
+        if (pers != null && !pers.isEmpty()) {
+            for (Permission p : pers) {
+                if (p.getId() != null) {
+                    long now = System.currentTimeMillis();
+                    long time = 0 + Long.parseLong(p.getCreatedate()) + (Long.parseLong(p.getTime()) * 60 * 1000);
+                    if (now > time) {
+                        continue;
+                    }
+                    p.setId(((Map<String, String>) p.getId()).get("$oid"));
+                }
+                resultpers.add(p);
+            }
+        }
+        return new Gson().toJson(resultpers, new TypeToken<List<Permission>>() {
+        }.getType());
+//        return DBManager.getDB().getByCondition(Constants.PERMISSION_TABLE, conditionMap);
     }
 
     public boolean revokePermission(String permissionId) throws Exception {
@@ -97,13 +118,30 @@ public class PermissionManager {
         if (json == null || json.isEmpty()) {
             return false;
         }
-        Permission permission = new Gson().fromJson(json, new TypeToken<Permission>() {
+        List<Permission> permissions = new Gson().fromJson(json, new TypeToken<List<Permission>>() {
         }.getType());
-        permission.setStatus("inactive");
-        permission.setUpdatedate(System.currentTimeMillis() + "");
-        json = new Gson().toJson(permission, new TypeToken<Permission>() {
+        if (permissions != null && !permissions.isEmpty()) {
+            Permission permission = permissions.get(0);
+            permission.setStatus("inactive");
+            permission.setUpdatedate(System.currentTimeMillis() + "");
+            json = new Gson().toJson(permission, new TypeToken<Permission>() {
+            }.getType());
+            return DBManager.getDB().modify(Constants.PERMISSION_TABLE, json, permissionId);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkOwner(String loginid, String fileId) throws Exception {
+        String json = DBManager.getDB().getByKey(Constants.FILE_TABLE, fileId);
+        List<FileHolder> fhs = new Gson().fromJson(json, new TypeToken<List<FileHolder>>() {
         }.getType());
-        return DBManager.getDB().modify(Constants.PERMISSION_TABLE, json, permissionId);
+        if (fhs != null && !fhs.isEmpty()) {
+            FileHolder fh = fhs.get(0);
+            return fh.getOwnerID().equals(loginid);
+        } else {
+            return false;
+        }
     }
 
 }

@@ -30,13 +30,19 @@ public class FetchFileByIdService extends HttpServlet {
             String code = request.getParameter("code");
             boolean securityFlag = new Common().checkUserSecret(loginid, code);
             if (securityFlag) {
+                boolean ownerFlag = false;
                 String fileId = request.getParameter("fileid");
                 Permission permission = new PermissionManager().fetch(loginid, fileId);
-                permission = new Permission();
-                permission.setStatus("active");
-                if (permission != null && !permission.toString().isEmpty() && permission.getStatus().equals("active")) {
-                    FileHolder fileHolder = new FileManager().downloadFile(fileId);
+                if (permission == null) {
+                    ownerFlag = new PermissionManager().checkOwner(loginid, fileId);
+                } else {
+                    permission.setStatus("active");
+                }
 
+                if ((permission != null && !permission.toString().isEmpty() && permission.getStatus().equals("active")) || ownerFlag) {
+                    FileHolder fileHolder = new FileManager().downloadFile(fileId);
+//                    String url = "file://" + Constants.DBURL + fileHolder.getPathURL();
+//                    out.write(new Gson().toJson(url));
                     if (fileHolder != null) {
                         String mimeType = fileHolder.getMimeType();
                         if (mimeType == null) {

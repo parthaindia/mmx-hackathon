@@ -19,7 +19,7 @@ public class RevokePermissionService extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             String loginid = request.getParameter("loginid");
@@ -29,9 +29,9 @@ public class RevokePermissionService extends HttpServlet {
                 String permissionId = request.getParameter("permissionid");
                 boolean status = new PermissionManager().revokePermission(permissionId);
                 if (status) {
-                    out.write(new Gson().toJson(Constants.HTTP_STATUS_SUCCESS));
+                    out.write(Constants.HTTP_STATUS_SUCCESS);
                 } else {
-                    out.write(new Gson().toJson(Constants.HTTP_STATUS_FAIL));
+                    out.write(Constants.HTTP_STATUS_FAIL);
                 }
             }
         } catch (Exception ex) {
